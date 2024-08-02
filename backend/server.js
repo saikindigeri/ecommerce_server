@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 7000;
+const PORT = process.env.PORT || 6000;
 const DB_PATH = path.resolve(__dirname, 'database.db');
 const JWT_SECRET = 'your_jwt_secret';  // Replace with a more secure secret in production
 
