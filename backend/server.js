@@ -204,7 +204,8 @@ app.delete('/api/cart/:id', (req, res) => {
 
 // Order routes
 // POST /api/orders
-// localhost:7000/api/orders
+// localhost:7000/api/orders 
+/*
 app.post('/api/orders', (req, res) => {
     const { total } = req.body;
     const token = req.headers.authorization?.split(' ')[1];
@@ -231,6 +232,36 @@ app.post('/api/orders', (req, res) => {
         });
     });
 });
+*/
+
+app.post('/api/orders', (req, res) => {
+    const { product_id, quantity } = req.body;
+    const token = req.headers.authorization?.split(' ')[1];
+    
+    if (!token) return res.status(401).send('Token required');
+    
+    jwt.verify(token, JWT_SECRET, (err, decoded) => {
+        if (err) return res.status(401).send('Invalid token');
+        
+        const userId = decoded.id;
+        db.get('SELECT * FROM products WHERE id = ?', [product_id], (err, product) => {
+            if (err) return res.status(500).send(err.message);
+            if (!product) return res.status(404).send('Product not found');
+            
+            // Create an order
+            db.run(
+                'INSERT INTO orders (user_id, product_id, title, price, quantity, total_amount) VALUES (?, ?, ?, ?, ?, ?)',
+                [userId, product_id, product.name, product.price, quantity, product.price * quantity],
+                function (err) {
+                    if (err) return res.status(500).send(err.message);
+                    
+                    res.status(201).send({ id: this.lastID, message: 'Order placed successfully' });
+                }
+            );
+        });
+    });
+});
+
 
 // GET /api/orders/:userId
 // localhost:7000/api/orders/:userId
