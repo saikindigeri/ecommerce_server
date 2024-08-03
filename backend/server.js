@@ -53,10 +53,12 @@ const createTables = () => {
         db.run(`CREATE TABLE IF NOT EXISTS orders (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER,
-    product_id INTEGER,
+     title TEXT NOT NULL,
+    product_id INTEGER NOT NULL,
     price DECIMAL,
-    quantity INTEGER,
+    quantity INTEGER NOT NULL,
     total_amount DECIMAL,
+     image_url TEXT,
     FOREIGN KEY (product_id) REFERENCES products(id)
 
 
