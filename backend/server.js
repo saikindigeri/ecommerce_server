@@ -31,7 +31,7 @@ const createTables = () => {
 
         db.run(`CREATE TABLE IF NOT EXISTS products (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
+            title TEXT NOT NULL,
             description TEXT NOT NULL,
             price REAL NOT NULL,
             stock INTEGER NOT NULL,
@@ -117,7 +117,24 @@ app.get('/api/products/:id', (req, res) => {
         res.json(row);
     });
 });
+app.post('/api/products', (req, res) => {
+    const { title, description, price, stock, image_url } = req.body;
 
+    if (!name || !description || price === undefined || stock === undefined) {
+        return res.status(400).send('Name, description, price, and stock are required');
+    }
+
+    db.run(
+        'INSERT INTO products (name, description, price, stock, image_url) VALUES (?, ?, ?, ?, ?)',
+        [name, description, price, stock, image_url],
+        function (err) {
+            if (err) {
+                return res.status(500).send('Error inserting product');
+            }
+            res.status(201).json({ id: this.lastID, message: 'Product added successfully' });
+        }
+    );
+});
 // Cart routes
 // GET /api/cart
 // localhost:7000/api/cart
