@@ -19,7 +19,7 @@ const seedProducts = () => {
           "description": "Experience superior sound quality with our wireless Bluetooth headphones. Designed with advanced noise-cancelling technology, these over-ear headphones provide a comfortable fit and exceptional audio clarity. With a long-lasting battery that supports up to 30 hours of playtime, you can enjoy your favorite music, podcasts, and movies without interruptions. The built-in microphone ensures clear hands-free calls, making them perfect for both entertainment and professional use.",
           "price": 89.99,
           "stock": 150,
-          "image_url": "https://images.unsplash.com/photo-1520975910876-72f8a59f3c1e"
+          "image_url": "https://images.unsplash.com/photo-1520975910876-72f8a59f3c1ehttps://m.media-amazon.com/images/I/315vj6oj-FL._SX300_SY300_QL70_FMwebp_.jpg"
         },
         {
           "id": 2,
@@ -27,7 +27,7 @@ const seedProducts = () => {
           "description": "Our multifunctional smartwatch is the ultimate accessory for staying connected and tracking your health. Equipped with a sleek touchscreen display, it offers notifications for calls, messages, and apps right on your wrist. The built-in fitness tracker monitors your heart rate, steps, and sleep patterns, while its GPS functionality helps you navigate and map your runs. Compatible with both iOS and Android, this smartwatch seamlessly integrates into your daily routine, keeping you informed and motivated.",
           "price": 199.99,
           "stock": 100,
-          "image_url": "https://images.unsplash.com/photo-1570525784573-d760e1bb3a8d"
+          "image_url": "https://m.media-amazon.com/images/I/41HLMvalT6L._SX300_SY300_QL70_FMwebp_.jpg"
         },
         {
           "id": 3,
@@ -35,7 +35,7 @@ const seedProducts = () => {
           "description": "Transform your living room into a cinematic experience with our 55-inch 4K Ultra HD TV. Featuring stunning resolution and vivid color accuracy, this television provides breathtaking visuals and an immersive viewing experience. The smart TV functionality allows you to access popular streaming services, browse the internet, and enjoy a wide range of entertainment options. With its slim profile and elegant design, it seamlessly fits into any modern home decor, making it a centerpiece of your entertainment setup.",
           "price": 499.99,
           "stock": 30,
-          "image_url": "https://images.unsplash.com/photo-1556740749-887f6717d7e4"
+          "image_url": "https://res.cloudinary.com/sharp-consumer-eu/image/fetch/w_1100,f_auto,q_auto/https://s3.infra.brandquad.io/accounts-media/SHRP/DAM/origin/a3b0c3c8-6ce9-11ea-aeea-becc10303f49.jpg"
         },
         {
           "id": 4,
