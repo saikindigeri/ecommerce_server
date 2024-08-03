@@ -281,10 +281,7 @@ app.get('/api/orders', (req, res) => {
             'SELECT o.id, o.user_id, o.product_id, p.name AS title, o.price, o.quantity, o.total_amount FROM orders o JOIN products p ON o.product_id = p.id WHERE o.user_id = ?',
             [userId],
             (err, rows) => {
-                if (err) {
-                    console.error('Database error:', err);
-                    return res.status(500).send(err.message);
-                }
+                if (err) return res.status(500).send(err.message);
                 res.json(rows);
             }
         );
