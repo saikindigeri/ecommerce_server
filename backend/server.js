@@ -236,6 +236,7 @@ app.post('/api/orders', (req, res) => {
 });
 */
 
+
 app.post('/api/orders', (req, res) => {
     const { product_id, quantity } = req.body;
     const token = req.headers.authorization?.split(' ')[1];
@@ -246,7 +247,7 @@ app.post('/api/orders', (req, res) => {
         if (err) return res.status(401).send('Invalid token');
         
         const userId = decoded.id;
-        db.get('SELECT * FROM products WHERE id = ?', [product_id], (err, product) => {
+        db.get('SELECT * FROM cart WHERE user_id = ? AND product_id = ?', [userId, product_id], (err, existingItem) => {
             if (err) return res.status(500).send(err.message);
             if (!product) return res.status(404).send('Product not found');
             
@@ -263,7 +264,6 @@ app.post('/api/orders', (req, res) => {
         });
     });
 });
-
 
 // GET /api/orders/:userId
 // localhost:7000/api/orders/:userId
