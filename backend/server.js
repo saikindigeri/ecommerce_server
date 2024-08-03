@@ -31,7 +31,7 @@ const createTables = () => {
 
         db.run(`CREATE TABLE IF NOT EXISTS products (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            title TEXT NOT NULL,
+            name TEXT NOT NULL,
             description TEXT NOT NULL,
             price REAL NOT NULL,
             stock INTEGER NOT NULL,
@@ -42,7 +42,7 @@ const createTables = () => {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
             product_id INTEGER NOT NULL,
-            title TEXT NOT NULL,
+            name TEXT NOT NULL,
             price REAL NOT NULL,
             quantity INTEGER NOT NULL,
             image_url TEXT,
@@ -53,7 +53,7 @@ const createTables = () => {
         db.run(`CREATE TABLE IF NOT EXISTS orders (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER,
-     title TEXT NOT NULL,
+     name TEXT NOT NULL,
     product_id INTEGER NOT NULL,
     price DECIMAL,
     quantity INTEGER NOT NULL,
@@ -117,27 +117,28 @@ app.get('/api/products/:id', (req, res) => {
         res.json(row);
     });
 });
-app.post('/api/products', (req, res) => {
-    const { title, description, price, stock, image_url } = req.body;
 
-    if (!name || !description || price === undefined || stock === undefined) {
-        return res.status(400).send('title, description, price, and stock are required');
+
+
+app.post('/api/products', (req, res) => {
+    const {name, description, price, stock, image_url } = req.body;
+
+    // Validate input
+    if (!name || !description || !price || !stock || !image_url) {
+        return res.status(400).json({ error: 'All fields are required' });
     }
 
-    db.run(
-        'INSERT INTO products (title, description, price, stock, image_url) VALUES (?, ?, ?, ?, ?)',
-        [title, description, price, stock, image_url],
-        function (err) {
-            if (err) {
-                return res.status(500).send('Error inserting product');
-            }
-            res.status(201).json({ id: this.lastID, message: 'Product added successfully' });
+    // Insert product into database
+    const query = 'INSERT INTO products (name, description, price, stock, image_url) VALUES (?, ?, ?, ?, ?)';
+    db.run(query, [name, description, price, stock, image_url], function (err) {
+        if (err) {
+            return res.status(500).json({ error: 'Database error: ' + err.message });
         }
-    );
+        res.status(201).json({ id: this.lastID, message: 'Product added successfully' });
+    });
 });
-// Cart routes
-// GET /api/cart
-// localhost:7000/api/cart
+
+
 app.get('/api/cart', (req, res) => {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) return res.status(401).send('Token required');
@@ -200,7 +201,7 @@ app.post('/api/cart', (req, res) => {
                 db.get('SELECT * FROM products WHERE id = ?', [product_id], (err, product) => {
                     if (err) return res.status(500).send(err.message);
                     if (!product) return res.status(404).send('Product not found');
-                    db.run('INSERT INTO cart (user_id, product_id, title, price, quantity, image_url) VALUES (?, ?, ?, ?, ?, ?)', [userId, product_id, product.name, product.price, quantity, product.image_url], function (err) {
+                    db.run('INSERT INTO cart (user_id, product_id, name, price, quantity, image_url) VALUES (?, ?, ?, ?, ?, ?)', [userId, product_id, product.name, product.price, quantity, product.image_url], function (err) {
                         if (err) return res.status(500).send(err.message);
                         res.status(201).send({ id: this.lastID, message: 'Product added to cart' });
                     });
@@ -270,7 +271,7 @@ app.post('/api/orders', (req, res) => {
             
             // Create an order
             db.run(
-                'INSERT INTO orders (user_id, product_id, title, price, quantity, total_amount) VALUES (?, ?, ?, ?, ?, ?)',
+                'INSERT INTO orders (user_id, product_id, name, price, quantity, total_amount) VALUES (?, ?, ?, ?, ?, ?)',
                 [userId, product_id, product.name, product.price, quantity, product.price * quantity],
                 function (err) {
                     if (err) return res.status(500).send(err.message);
