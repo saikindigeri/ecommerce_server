@@ -126,7 +126,7 @@ app.post('/api/products', (req, res) => {
 
     db.run(
         'INSERT INTO products (title, description, price, stock, image_url) VALUES (?, ?, ?, ?, ?)',
-        [name, description, price, stock, image_url],
+        [title, description, price, stock, image_url],
         function (err) {
             if (err) {
                 return res.status(500).send('Error inserting product');
