@@ -42,7 +42,7 @@ const createTables = () => {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
             product_id INTEGER NOT NULL,
-            name TEXT NOT NULL,
+            title TEXT NOT NULL,
             price REAL NOT NULL,
             quantity INTEGER NOT NULL,
             image_url TEXT,
@@ -53,7 +53,7 @@ const createTables = () => {
         db.run(`CREATE TABLE IF NOT EXISTS orders (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER,
-     name TEXT NOT NULL,
+     title TEXT NOT NULL,
     product_id INTEGER NOT NULL,
     price DECIMAL,
     quantity INTEGER NOT NULL,
@@ -201,7 +201,7 @@ app.post('/api/cart', (req, res) => {
                 db.get('SELECT * FROM products WHERE id = ?', [product_id], (err, product) => {
                     if (err) return res.status(500).send(err.message);
                     if (!product) return res.status(404).send('Product not found');
-                    db.run('INSERT INTO cart (user_id, product_id, name, price, quantity, image_url) VALUES (?, ?, ?, ?, ?, ?)', [userId, product_id, product.name, product.price, quantity, product.image_url], function (err) {
+                    db.run('INSERT INTO cart (user_id, product_id, title, price, quantity, image_url) VALUES (?, ?, ?, ?, ?, ?)', [userId, product_id, product.title, product.price, quantity, product.image_url], function (err) {
                         if (err) return res.status(500).send(err.message);
                         res.status(201).send({ id: this.lastID, message: 'Product added to cart' });
                     });
@@ -271,8 +271,8 @@ app.post('/api/orders', (req, res) => {
             
             // Create an order
             db.run(
-                'INSERT INTO orders (user_id, product_id, name, price, quantity, total_amount) VALUES (?, ?, ?, ?, ?, ?)',
-                [userId, product_id, product.name, product.price, quantity, product.price * quantity],
+                'INSERT INTO orders (user_id, product_id, title, price, quantity, total_amount) VALUES (?, ?, ?, ?, ?, ?)',
+                [userId, product_id, product.title, product.price, quantity, product.price * quantity],
                 function (err) {
                     if (err) return res.status(500).send(err.message);
                     
