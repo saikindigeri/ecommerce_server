@@ -121,11 +121,11 @@ app.post('/api/products', (req, res) => {
     const { title, description, price, stock, image_url } = req.body;
 
     if (!name || !description || price === undefined || stock === undefined) {
-        return res.status(400).send('Name, description, price, and stock are required');
+        return res.status(400).send('title, description, price, and stock are required');
     }
 
     db.run(
-        'INSERT INTO products (name, description, price, stock, image_url) VALUES (?, ?, ?, ?, ?)',
+        'INSERT INTO products (title, description, price, stock, image_url) VALUES (?, ?, ?, ?, ?)',
         [name, description, price, stock, image_url],
         function (err) {
             if (err) {
