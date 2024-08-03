@@ -265,11 +265,23 @@ app.post('/api/orders', (req, res) => {
 
 // GET /api/orders/:userId
 // localhost:7000/api/orders/:userId
-app.get('/api/orders/:userId', (req, res) => {
-    const { userId } = req.params;
-    db.all('SELECT * FROM orders WHERE user_id = ?', [userId], (err, rows) => {
-        if (err) return res.status(500).send(err.message);
-        res.json(rows);
+app.get('/api/orders', (req, res) => {
+    const token = req.headers.authorization?.split(' ')[1];
+    
+    if (!token) return res.status(401).send('Token required');
+    
+    jwt.verify(token, JWT_SECRET, (err, decoded) => {
+        if (err) return res.status(401).send('Invalid token');
+        
+        const userId = decoded.id;
+        db.all(
+            'SELECT o.id, o.user_id, o.product_id, p.name AS title, o.price, o.quantity, o.total_amount FROM orders o JOIN products p ON o.product_id = p.id WHERE o.user_id = ?',
+            [userId],
+            (err, rows) => {
+                if (err) return res.status(500).send(err.message);
+                res.json(rows);
+            }
+        );
     });
 });
 
